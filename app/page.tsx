@@ -8,24 +8,18 @@ import { Heart, RefreshCw } from "lucide-react";
 
 export default function Home() {
   const [textareaContent, setTextareaContent] = useState("");
-  const [ hslInNum, sels ]: [number[][], string[]]  = useMemo(() => {
+  const colorSets = useMemo(() => {
     try {
-      let res = [];
-      let [properties, selectors] = parseCSS(textareaContent);
-      for (const elem of properties) {
-        let entries = Object.entries(elem);
-        const entriesInNum = entries.map((v) => {
-          return [v[0], hslStrToNum(v[1])];
-        });
-        res.push(entriesInNum);
-      }
-      console.log(res);
-      return [res, selectors];
+      let parsed = parseCSS(textareaContent);
+      console.log(parsed);
+      return parsed;
     } catch (error) {
       console.log(`ERROR: ${error}`);
     }
   }, [textareaContent]);
-  const colorGroups = hslInNum?.map((v) => <ThemeGroup l={v}></ThemeGroup>);
+  const colorGroups = colorSets?.map((colorSet) => (
+    <ThemeGroup key={colorSet.selector} colorSet={colorSet}></ThemeGroup>
+  ));
 
   const handleReset = () => {
     setTextareaContent("");
@@ -48,7 +42,6 @@ export default function Home() {
           <RefreshCw className="mr-2 h-4 w-4" />
           Reset
         </Button>
-        <div>{sels}</div>
         {/* <div>{textareaContent}</div> */}
         {/* <div className={clsx(`${"bg-[#bb8211]"}`, 'h-12', 'w-12')}></div> */}
       </div>
