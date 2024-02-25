@@ -1,6 +1,6 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { hslStrToNum, parseCSS } from "./utils/parse";
 import ThemeGroup from "./components/themeGroup";
 import { Button } from "@/components/ui/button";
@@ -8,33 +8,28 @@ import { Heart, RefreshCw } from "lucide-react";
 
 export default function Home() {
   const [textareaContent, setTextareaContent] = useState("");
-  const hslInNum = useMemo(() => {
-    let res = [];
-    let [properties, selectors] = parseCSS(textareaContent);
-    for (const elem of properties) {
-      let entries = Object.entries(elem);
-      const entriesInNum = entries.map((v) => {
-        return [v[0], hslStrToNum(v[1])];
-      });
-      res.push(entriesInNum);
+  const [ hslInNum, sels ]: [number[][], string[]]  = useMemo(() => {
+    try {
+      let res = [];
+      let [properties, selectors] = parseCSS(textareaContent);
+      for (const elem of properties) {
+        let entries = Object.entries(elem);
+        const entriesInNum = entries.map((v) => {
+          return [v[0], hslStrToNum(v[1])];
+        });
+        res.push(entriesInNum);
+      }
+      console.log(res);
+      return [res, selectors];
+    } catch (error) {
+      console.log(`ERROR: ${error}`);
     }
-    console.log(res);
-    return res;
   }, [textareaContent]);
-  const colorGroups = hslInNum.map((v) => <ThemeGroup l={v}></ThemeGroup>);
+  const colorGroups = hslInNum?.map((v) => <ThemeGroup l={v}></ThemeGroup>);
 
   const handleReset = () => {
-    setTextareaContent('');
-  }
-
-  // useEffect(() => {
-  //   try {
-  //     // console.log(parseCSS(textareaContent));
-  //   } catch (error) {
-  //     console.log(`error: ${error}`);
-  //   }
-  //   // console.log(textareaContent)
-  // }, [textareaContent]);
+    setTextareaContent("");
+  };
 
   return (
     <main className="p-4 flex gap-2">
@@ -53,6 +48,7 @@ export default function Home() {
           <RefreshCw className="mr-2 h-4 w-4" />
           Reset
         </Button>
+        <div>{sels}</div>
         {/* <div>{textareaContent}</div> */}
         {/* <div className={clsx(`${"bg-[#bb8211]"}`, 'h-12', 'w-12')}></div> */}
       </div>

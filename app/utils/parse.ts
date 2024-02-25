@@ -1,10 +1,10 @@
 export function parseCSS(str: string) {
   const cssRules = str.split(/[;}\n]/);
   cssRules.forEach((rule, idx) => (cssRules[idx] = rule.trim()));
-//   console.log(cssRules);
+  //   console.log(cssRules);
   let res: Record<string, string>[] = [];
   let selectors: string[] = [];
-//   let currentSelector = "";
+  //   let currentSelector = "";
   cssRules.forEach((rule) => {
     if (rule.includes("{")) {
       const selectorName = rule.split("{")[0].trim();
@@ -19,8 +19,8 @@ export function parseCSS(str: string) {
 }
 
 export function hslStrToNum(str: string) {
-  const splitted = str.split(' ');
+  const splitted = str.split(" ");
   return splitted.map((x) => {
-    return Number(x.replace('%', ''));
-  })
+    return Number(x.replace("%", ""));
+  });
 }
