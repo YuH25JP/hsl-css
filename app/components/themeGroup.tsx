@@ -15,5 +15,12 @@ export default function ThemeGroup({ colorSet }: { colorSet: ColorSet }) {
       </>
     );
   });
-  return <div>{colors}</div>;
+  return (
+    <>
+      <div className="border-2 border-muted-foreground rounded-md p-2 mb-2 text-xl">
+        {colorSet.selector}
+      </div>
+      <div>{colors}</div>
+    </>
+  );
 }
